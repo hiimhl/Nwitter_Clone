@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import Auth from "../routes/Auth";
-import Home from "../routes/Home";
+import Auth from "routes/Auth";
+import Home from "routes/Home";
 
-function Router() {
-  const [isLoggendIn, setIsLoggedIn] = useState(false);
+function Router({ isLoggedIn }) {
   return (
     <HashRouter>
       <Routes>
-        {isLoggendIn ? (
+        {isLoggedIn ? (
           <>
             <Route path="/" element={<Home />} />
           </>
