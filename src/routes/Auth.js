@@ -27,7 +27,7 @@ function Auth() {
     // 비구조화 할당
     // const { name, value } = event.target; // 위의 코드와 같음
 
-    setUser({ ...user, [name]: value });
+    setUser({ [name]: value, ...user });
   };
 
   // Form OnSubmit
@@ -74,12 +74,10 @@ function Auth() {
     if (name === "google") {
       provider = new GoogleAuthProvider();
       const result = await signInWithPopup(authService, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
       console.log(result);
     } else if (name === "github") {
       provider = new GithubAuthProvider();
       const result = await signInWithPopup(authService, provider);
-      const credential = GithubAuthProvider.credentialFromResult(result);
       console.log(result);
     }
   };
