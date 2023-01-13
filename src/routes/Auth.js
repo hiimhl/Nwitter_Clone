@@ -55,7 +55,6 @@ function Auth() {
           user.password
         );
       }
-      console.log(data);
     } catch (error) {
       setError(error.message);
     }
@@ -74,11 +73,9 @@ function Auth() {
     if (name === "google") {
       provider = new GoogleAuthProvider();
       const result = await signInWithPopup(authService, provider);
-      console.log(result);
     } else if (name === "github") {
       provider = new GithubAuthProvider();
       const result = await signInWithPopup(authService, provider);
-      console.log(result);
     }
   };
 

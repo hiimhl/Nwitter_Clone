@@ -1,34 +1,42 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import Nweet from "components/Nweet";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  onSnapshot,
+  orderBy,
+  doc,
+} from "firebase/firestore";
 import { dbService } from "myFirebase";
 import React, { useEffect, useState } from "react";
 
-function Home() {
+function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
 
-  //Get data from firebase
-  const getNweets = async () => {
-    const dbNweets = await getDocs(collection(dbService, "nweets"));
-    dbNweets.forEach((doc) => {
-      const nweetObject = {
-        ...doc.data(),
-        id: doc.id,
-      };
-      setNweets((prev) => [nweetObject, ...prev]);
-    });
-  };
-
+  //Get data from firebase in realtime
   useEffect(() => {
-    getNweets();
-    console.log(nweets);
+    const q = query(
+      collection(dbService, "nweets"),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(q, (snapshot) => {
+      const nweetArr = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNweets(nweetArr);
+    });
   }, []);
 
   // Add data to firebase
   const onSubmit = async (e) => {
     e.preventDefault();
     await addDoc(collection(dbService, "nweets"), {
-      nweet,
+      text: nweet,
       createdAt: Date.now(),
+      creatorId: userObj.uid,
     });
     setNweet("");
   };
@@ -49,9 +57,11 @@ function Home() {
       </form>
       <div>
         {nweets.map((data) => (
-          <div key={data.id}>
-            <h4>{data.nweet}</h4>
-          </div>
+          <Nweet
+            key={data.id}
+            nweetObj={data}
+            isOwner={data.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>
