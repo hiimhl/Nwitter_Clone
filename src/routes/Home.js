@@ -2,18 +2,18 @@ import Nweet from "components/Nweet";
 import {
   addDoc,
   collection,
-  getDocs,
   query,
   onSnapshot,
   orderBy,
-  doc,
 } from "firebase/firestore";
 import { dbService } from "myFirebase";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
+  const [getPhoto, setGetPhoto] = useState(null);
+  const fileInput = useRef();
 
   //Get data from firebase in realtime
   useEffect(() => {
@@ -43,6 +43,23 @@ function Home({ userObj }) {
 
   const onChange = (e) => setNweet(e.target.value);
 
+  // Get image & Make a thumbnail
+  const onFileChange = (e) => {
+    const { files } = e.target;
+    const theFile = files[0]; // cause input get only one file
+    const reader = new FileReader();
+
+    reader.onloadend = (finishedEvent) => {
+      const { result } = finishedEvent.currentTarget; // Make image to string
+      setGetPhoto(result);
+    };
+    reader.readAsDataURL(theFile); // read image
+  };
+  const onClearPhoto = (e) => {
+    setGetPhoto(null);
+    fileInput.current.value = "";
+  };
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -53,7 +70,19 @@ function Home({ userObj }) {
           placeholder="What' on your mind?"
           maxLength={120}
         />
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInput}
+          onChange={onFileChange}
+        />
         <input type="submit" onClick={onSubmit} value="Nweet" />
+        {getPhoto && (
+          <div>
+            <img src={getPhoto} alt="thumbnail" width="50px" height="50px" />
+            <button onClick={onClearPhoto}>Clear image</button>
+          </div>
+        )}
       </form>
       <div>
         {nweets.map((data) => (
