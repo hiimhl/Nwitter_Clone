@@ -1,6 +1,7 @@
 import { async } from "@firebase/util";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { dbService } from "myFirebase";
+import { deleteObject, ref } from "firebase/storage";
+import { dbService, storageService } from "myFirebase";
 import React, { useState } from "react";
 
 function Nweet({ nweetObj, isOwner }) {
@@ -14,6 +15,9 @@ function Nweet({ nweetObj, isOwner }) {
     if (ok) {
       //delete nweet
       await deleteDoc(NweetTextRef);
+      if (nweetObj.photoUrl !== "") {
+        await deleteObject(ref(storageService, nweetObj.photoUrl));
+      }
     }
   };
 
@@ -45,6 +49,9 @@ function Nweet({ nweetObj, isOwner }) {
       ) : (
         <>
           <h4>{nweetObj.text}</h4>
+          {nweetObj.photoUrl && (
+            <img src={nweetObj.photoUrl} width="50px" height="50px" />
+          )}
           {isOwner && (
             <>
               <button onClick={onDelete}>Delete Nweet</button>

@@ -1,13 +1,15 @@
 import Nweet from "components/Nweet";
 import {
-  addDoc,
   collection,
   query,
   onSnapshot,
   orderBy,
+  addDoc,
 } from "firebase/firestore";
-import { dbService } from "myFirebase";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { dbService, storageService } from "myFirebase";
 import React, { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
@@ -33,12 +35,29 @@ function Home({ userObj }) {
   // Add data to firebase
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // Upload Photograph
+    let photoUrl = "";
+    if (getPhoto !== "") {
+      const photoRef = ref(storageService, `${userObj.uid}/${uuidv4()}`); // 유저아이디/랜덤아이디
+      // getStorage, 데이터가 저장될 주소
+      const response = await uploadString(photoRef, getPhoto, "data_url"); // 주소, 데이터, format
+
+      // download file what user uploaded
+      photoUrl = await getDownloadURL(response.ref);
+    }
+
     await addDoc(collection(dbService, "nweets"), {
       text: nweet,
       createdAt: Date.now(),
       creatorId: userObj.uid,
+      photoUrl,
     });
     setNweet("");
+    setGetPhoto("");
+
+    // Clean the input text
+    fileInput.current.value = "";
   };
 
   const onChange = (e) => setNweet(e.target.value);
@@ -49,10 +68,12 @@ function Home({ userObj }) {
     const theFile = files[0]; // cause input get only one file
     const reader = new FileReader();
 
+    // to read Image
     reader.onloadend = (finishedEvent) => {
-      const { result } = finishedEvent.currentTarget; // Make image to string
+      const { result } = finishedEvent.currentTarget;
       setGetPhoto(result);
     };
+    // Make Image to dataUrl / string
     reader.readAsDataURL(theFile); // read image
   };
   const onClearPhoto = (e) => {
