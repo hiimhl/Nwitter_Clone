@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const [getPhoto, setGetPhoto] = useState(null);
+  const [getPhoto, setGetPhoto] = useState("");
   const fileInput = useRef();
 
   //Get data from firebase in realtime

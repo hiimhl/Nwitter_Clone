@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { async } from "@firebase/util";
 import {
   getAuth,
   signInWithEmailAndPassword,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Router from "components/Router";
 import { authService } from "myFirebase";
+import { updateCurrentUser } from "firebase/auth";
 
 function App() {
   const [init, setInit] = useState(false);
@@ -10,17 +11,29 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
-        setUserObj(user); // set user infomation
+        setUserObj(user); // set user information
+      } else {
+        setUserObj(null);
       }
       setInit(true);
     });
   }, []);
   // onAuthStateChanged - like an EventListener. 상태가 변화하는 것을 지켜보고 알려줌.
 
+  // Send to Profile component
+  const refreshUser = async () => {
+    await updateCurrentUser(authService, authService.currentUser);
+    setUserObj(authService.currentUser);
+  };
+
   return (
     <>
       {init ? (
-        <Router isLoggedIn={Boolean(userObj)} userObj={userObj} />
+        <Router
+          refreshUser={refreshUser}
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj}
+        />
       ) : (
         "Initializing..."
       )}
