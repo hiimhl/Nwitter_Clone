@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Router from "components/Router";
-import { authService } from "myFirebase";
+import Router from "./Router";
+import { authService } from "../myFirebase";
 import { updateCurrentUser } from "firebase/auth";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="wrapper">
       {init ? (
         <Router
           refreshUser={refreshUser}
@@ -37,8 +37,10 @@ function App() {
       ) : (
         "Initializing..."
       )}
-      <footer> &copy; {new Date().getFullYear()} Nwitter</footer>
-    </>
+      <footer>
+        <span> &copy; {new Date().getFullYear()} Nwitter</span>
+      </footer>
+    </div>
   );
 }
 

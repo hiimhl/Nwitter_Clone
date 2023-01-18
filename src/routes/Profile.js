@@ -1,6 +1,6 @@
 import { updateProfile } from "firebase/auth";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { authService, dbService } from "myFirebase";
+import { authService, dbService } from "../myFirebase";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -25,9 +25,9 @@ function Profile({ refreshUser, userObj }) {
       // Firebase는 noSQL 기반 DB라서 몇몇 기능은 중복적으로 사용될 수 없다.
     );
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
+    // querySnapshot.forEach((doc) => {
+    //   console.log(doc.id, " => ", doc.data());
+    // }); 내가 작성한 데이터 출력
   };
 
   useEffect(() => {
@@ -47,18 +47,29 @@ function Profile({ refreshUser, userObj }) {
   };
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
+    <div className="container">
+      <form onSubmit={onSubmit} className="profileForm">
         <input
           type="text"
+          autoFocus
           placeholder="Display name"
           onChange={onChange}
           value={newDisplayName}
         />
-        <input type="submit" onClick={onSubmit} value="Update Profile" />
+        <input
+          type="submit"
+          onClick={onSubmit}
+          value="Update Profile"
+          className="formBtn"
+          style={{
+            marginTop: 10,
+          }}
+        />
       </form>
-      <button onClick={onLogOut}>Log Out</button>
-    </>
+      <span className="formBtn cancelBtn logOut" onClick={onLogOut}>
+        Log Out
+      </span>
+    </div>
   );
 }
 export default Profile;
