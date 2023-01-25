@@ -5,28 +5,53 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+
+// Style
+const Nav = styled.nav`
+  ul {
+    display: flex;
+    justify-content: center;
+    margin-top: 50;
+  }
+`;
+
+// Link - react-router
+const StyledLink = styled(Link)`
+  margin-left: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12;
+`;
+
+// Font Awesome Icon
+const BlueIcon = styled(FontAwesomeIcon)`
+  color: #04aaff;
+  font-size: 28px;
+`;
 
 function Navigation({ userObj }) {
   return (
-    <nav>
-      <ul className="nav__box">
+    <Nav>
+      <ul>
         <li>
           <Link to="/" style={{ marginRight: 10 }}>
-            <FontAwesomeIcon icon={faTwitter} color={"#04AAFF"} size="2x" />
+            <BlueIcon icon={faTwitter} />
           </Link>
         </li>
         <li>
-          <Link to="/profile" className="link_profile">
-            <FontAwesomeIcon icon={faUser} color={"#04AAFF"} size="2x" />
+          <StyledLink to="/profile">
+            <BlueIcon icon={faUser} />
             <span style={{ marginTop: 10 }}>
               {userObj.displayName
                 ? `${userObj.displayName}의 Profile`
                 : "Profile"}
             </span>
-          </Link>
+          </StyledLink>
         </li>
       </ul>
-    </nav>
+    </Nav>
   );
 }
 

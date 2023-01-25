@@ -2,11 +2,33 @@ import Nweet from "components/Nweet";
 import NweetFactory from "../components/NweetFactory";
 import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 import { dbService } from "myFirebase";
-import React, { useEffect, useRef, useState } from "react";
-import { Link, Route } from "react-router-dom";
-import Profile from "./Profile";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 
-function Home({ userObj, refreshUser }) {
+// Style
+
+export const HomeContainer = styled.div`
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const NweetBox = styled.div`
+  margin-top: 30px;
+  height: auto;
+  max-height: 57vh;
+
+  /* Make scroll and hide scrollbar */
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+  &::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  }
+`;
+
+function Home({ userObj }) {
   const [nweets, setNweets] = useState([]);
 
   //Get data from firebase in realtime
@@ -25,9 +47,9 @@ function Home({ userObj, refreshUser }) {
   }, []);
 
   return (
-    <div className="container">
+    <HomeContainer>
       <NweetFactory userObj={userObj} />
-      <div style={{ marginTop: 30 }}>
+      <NweetBox>
         {nweets.map((data) => (
           <Nweet
             key={data.id}
@@ -35,8 +57,8 @@ function Home({ userObj, refreshUser }) {
             isOwner={data.creatorId === userObj.uid}
           />
         ))}
-      </div>
-    </div>
+      </NweetBox>
+    </HomeContainer>
   );
 }
 export default Home;

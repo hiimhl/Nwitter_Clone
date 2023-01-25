@@ -4,6 +4,48 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import styled from "styled-components";
+import { HomeContainer } from "routes/Home";
+
+// Style
+const Input = styled.input`
+  max-width: 320px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 1);
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: black;
+`;
+
+const SubmitBtn = styled.input`
+  text-align: center;
+  background: #04aaff;
+  color: white;
+  margin-top: 10px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 30px;
+`;
+
+const Error = styled.span`
+  color: tomato;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+`;
+
+const SwitchBtn = styled.span`
+  color: #04aaff;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  display: block;
+  font-size: 12px;
+  text-decoration: underline;
+`;
+
 function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,15 +60,11 @@ function AuthForm() {
     // 비구조화 할당
     // const { name, value } = event.target; // 위의 코드와 같음
 
-    // setUser((prev) => ({ [name]: value, ...prev }));
-
     if (name === "email") {
       setEmail(value);
     } else if (name === "password") {
       setPassword(value);
     }
-
-    // setHi(event.target.value);
   };
 
   // Form OnSubmit
@@ -54,8 +92,8 @@ function AuthForm() {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="container">
-        <input
+      <HomeContainer as="form" onSubmit={onSubmit}>
+        <Input
           name="email"
           type="email"
           placeholder="Email"
@@ -63,7 +101,7 @@ function AuthForm() {
           onChange={onChange}
           required
         />
-        <input
+        <Input
           name="password"
           type="password"
           placeholder="Password"
@@ -71,12 +109,15 @@ function AuthForm() {
           onChange={onChange}
           required
         />
-        <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
-        {error && <span className="authError">{error}</span>}
-      </form>
-      <span onClick={toggleAccount} className="authSwitch">
+        <SubmitBtn
+          type="submit"
+          value={newAccount ? "Create Account" : "Log In"}
+        />
+        {error && <Error>{error}</Error>}
+      </HomeContainer>
+      <SwitchBtn onClick={toggleAccount}>
         {newAccount ? "Sign In" : "Create Account"}
-      </span>
+      </SwitchBtn>
     </>
   );
 }

@@ -3,6 +3,38 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { authService, dbService } from "../myFirebase";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { HomeContainer } from "./Home";
+import styled from "styled-components";
+
+// Style
+const Form = styled.form`
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 30px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  input {
+    border: 1px solid #04aaff;
+    padding: 7px 20px;
+    text-align: center;
+    color: white;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
+`;
+
+// Form button
+export const FormBtn = styled.input`
+  cursor: pointer;
+  width: 100%;
+  padding: ${(pros) => (pros.btn ? "10px 0" : "10px 20px")};
+  text-align: center;
+  color: white;
+  border-radius: 20px;
+  background-color: ${(props) => props.bgColor || "#04aaff"};
+  margin-top: ${(props) => props.marginTop || 0};
+`;
 
 function Profile({ refreshUser, userObj }) {
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
@@ -47,8 +79,8 @@ function Profile({ refreshUser, userObj }) {
   };
 
   return (
-    <div className="container">
-      <form onSubmit={onSubmit} className="profileForm">
+    <HomeContainer>
+      <Form onSubmit={onSubmit}>
         <input
           type="text"
           autoFocus
@@ -56,20 +88,23 @@ function Profile({ refreshUser, userObj }) {
           onChange={onChange}
           value={newDisplayName}
         />
-        <input
+        <FormBtn
           type="submit"
           onClick={onSubmit}
+          marginTop="10px"
           value="Update Profile"
-          className="formBtn"
-          style={{
-            marginTop: 10,
-          }}
         />
-      </form>
-      <span className="formBtn cancelBtn logOut" onClick={onLogOut}>
+      </Form>
+      <FormBtn
+        as="span"
+        bgColor="tomato"
+        marginTop="50px"
+        btn={true}
+        onClick={onLogOut}
+      >
         Log Out
-      </span>
-    </div>
+      </FormBtn>
+    </HomeContainer>
   );
 }
 export default Profile;

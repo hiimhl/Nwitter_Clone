@@ -14,6 +14,35 @@ import {
   faGoogle,
   faGithub,
 } from "@fortawesome/free-brands-svg-icons";
+import styled from "styled-components";
+
+// Style
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10vh;
+`;
+
+const Btns = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 320px;
+
+  button {
+    cursor: pointer;
+    border-radius: 20px;
+    border: none;
+    padding: 10px 0px;
+    font-size: 12px;
+    text-align: center;
+    width: 150px;
+    background: white;
+    cursor: pointer;
+  }
+`;
 
 function Auth() {
   // Handle google and github login buttons
@@ -33,7 +62,7 @@ function Auth() {
   };
 
   return (
-    <div className="authContainer">
+    <Container>
       <FontAwesomeIcon
         icon={faTwitter}
         color={"#04AAFF"}
@@ -41,15 +70,15 @@ function Auth() {
         style={{ marginBottom: 30 }}
       />
       <AuthForm />
-      <div className="authBtns">
-        <button onClick={onSocialClick} name="google" className="authBtn">
-          Continue with Google <FontAwesomeIcon icon={faGoogle} />
+      <Btns>
+        <button onClick={onSocialClick} name="google">
+          Google <FontAwesomeIcon icon={faGoogle} size="2x" />
         </button>
-        <button onClick={onSocialClick} name="github" className="authBtn">
-          Continue with Github <FontAwesomeIcon icon={faGithub} />
+        <button onClick={onSocialClick} name="github">
+          Github <FontAwesomeIcon icon={faGithub} size="2x" />
         </button>
-      </div>
-    </div>
+      </Btns>
+    </Container>
   );
 }
 export default Auth;

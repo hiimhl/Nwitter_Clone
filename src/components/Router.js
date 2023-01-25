@@ -12,10 +12,7 @@ function Router({ refreshUser, isLoggedIn, userObj }) {
       <Routes>
         {isLoggedIn ? (
           <>
-            <Route
-              path="/*"
-              element={<Home refreshUser={refreshUser} userObj={userObj} />}
-            />
+            <Route path="/" element={<Home userObj={userObj} />} />
             <Route
               path="/profile"
               element={<Profile refreshUser={refreshUser} userObj={userObj} />}

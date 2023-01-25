@@ -5,6 +5,87 @@ import { v4 as uuidv4 } from "uuid";
 import { collection, addDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+
+// Style
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+const InputBox = styled.div`
+  display: flex;
+  align-items: center;
+  /* flex-wrap: wrap; */
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  div {
+    width: 90%;
+    margin: 10px 0;
+
+    input {
+      flex-grow: 1;
+      height: 40px;
+      padding: 0px 20px;
+      width: 100%;
+      margin-top: 10px;
+      color: white;
+      border: 1px solid #04aaff;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 12px;
+    }
+  }
+`;
+
+const Arrow = styled.input`
+  /* position: absolute;
+  right: -15px; */
+  background-color: #04aaff;
+  height: 40px;
+  width: 40px;
+  padding: 10px 0px;
+  text-align: center;
+  border-radius: 20px;
+  color: white;
+`;
+
+const Label = styled.label`
+  color: #04aaff;
+  cursor: pointer;
+
+  span {
+    margin-right: 10px;
+    font-size: 12px;
+  }
+`;
+const PhotoAttachment = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  img {
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+  }
+`;
+
+const PhotoClear = styled.div`
+  color: #04aaff;
+  cursor: pointer;
+  text-align: center;
+
+  span {
+    margin-right: 10px;
+    font-size: 12px;
+  }
+`;
 
 function NweetFactory({ userObj }) {
   const [nweet, setNweet] = useState("");
@@ -64,32 +145,35 @@ function NweetFactory({ userObj }) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="factoryForm">
-      <div className="factoryInput__container">
-        <input
-          type="text"
-          onChange={onChange}
-          value={nweet}
-          placeholder="What' on your mind?"
-          maxLength={120}
-        />
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInput}
-          onChange={onFileChange}
-        />
-        <input
+    <Form onSubmit={onSubmit}>
+      <InputBox>
+        <div>
+          <input
+            type="text"
+            onChange={onChange}
+            value={nweet}
+            placeholder="What' on your mind?"
+            maxLength={120}
+            autoFocus
+          />
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInput}
+            onChange={onFileChange}
+          />
+        </div>
+        <Arrow
           type="submit"
           onClick={onSubmit}
           value="&rarr;"
           className="factoryInput__arrow"
         />
-      </div>
-      <label htmlFor="attach-file" className="factoryInput__label">
+      </InputBox>
+      <Label htmlFor="attach-file">
         <span>Add photos</span>
         <FontAwesomeIcon icon={faPlus} />
-      </label>
+      </Label>
       <input
         id="attach-file"
         type="file"
@@ -101,20 +185,20 @@ function NweetFactory({ userObj }) {
       />
 
       {getPhoto && (
-        <div className="factoryForm__attachment">
+        <PhotoAttachment>
           <img
             src={getPhoto}
             style={{
               backgroundImage: getPhoto,
             }}
           />
-          <div className="factoryForm__clear" onClick={onClearPhoto}>
+          <PhotoClear onClick={onClearPhoto}>
             <span>Remove</span>
             <FontAwesomeIcon icon={faTimes} />
-          </div>
-        </div>
+          </PhotoClear>
+        </PhotoAttachment>
       )}
-    </form>
+    </Form>
   );
 }
 
